@@ -19,6 +19,8 @@ async function petsArea() {
     const petsData = await petsPromise.json()
     petsData.forEach(pet => {
         const clone = template.content.cloneNode(true)
+        //set data-species attributes
+        clone.querySelector(".pet-card").dataset.species = pet.species
         clone.querySelector("h3").textContent = pet.name
         clone.querySelector(".pet-description").textContent = pet.description
         clone.querySelector(".pet-age").textContent = createAgeText(pet.birthYear)
@@ -58,8 +60,17 @@ allButtons.forEach(el => {
 function handleButtonClick(e) {
     // remove active class from ALL buttons
     allButtons.forEach(el => { el.classList.remove("active") })
+
     // add active class to button that was Clicked
     e.target.classList.add("active")
 
     // filter the pet cards
+    const currentFilter = e.target.dataset.filter
+    document.querySelectorAll(".pet-card").forEach(el => {
+        if (currentFilter == el.dataset.species || currentFilter == "all") {
+            el.style.display = "grid"
+        } else {
+            el.style.display = "none"
+        }
+    })
 }
